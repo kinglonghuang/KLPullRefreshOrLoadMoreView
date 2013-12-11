@@ -1,5 +1,5 @@
 //
-//  IDFPullRefreshOrLoadMoreView.m
+//  KLPullRefreshOrLoadMoreView.m
 //  TestIDFPullView
 //
 //  Created by kinglonghuang on 12/11/13.
@@ -7,17 +7,17 @@
 //
 
 #import <CoreText/CoreText.h>
-#import "IDFPullRefreshOrLoadMoreView.h"
+#import "KLPullRefreshOrLoadMoreView.h"
 
 #define FLIP_ANIMATION_DURATION             0.18f
 
-@implementation IDFPullRefreshOrLoadMoreInfo : NSObject 
+@implementation KLPullRefreshOrLoadMoreInfo : NSObject 
 
 @end
 
-@interface IDFPullRefreshOrLoadMoreView()
+@interface KLPullRefreshOrLoadMoreView()
 
-@property (nonatomic, assign) IDFPullRefreshOrLoadMoreViewState     pullRefreshOrLoadMoreState;
+@property (nonatomic, assign) KLPullRefreshOrLoadMoreViewState     pullRefreshOrLoadMoreState;
 
 @property (nonatomic, strong) UILabel                               * desLabel;
 
@@ -27,7 +27,7 @@
 
 @end
 
-@implementation IDFPullRefreshOrLoadMoreView
+@implementation KLPullRefreshOrLoadMoreView
 
 #pragma mark - Public
 
@@ -36,11 +36,11 @@
         return;
     }
     
-    if (self.pullRefreshOrLoadMoreState != IDFPullRefreshOrLoadMoreViewStateLoading) {
-		if (self.pullRefreshOrLoadMoreState == IDFPullRefreshOrLoadMoreViewStatePulling && ![self shouldTiggleRefreshOrLoadMoreForScrollView:scrollView]) {
-			[self setPullRefreshOrLoadMoreState:IDFPullRefreshOrLoadMoreViewStateNormal];
-		} else if (self.pullRefreshOrLoadMoreState == IDFPullRefreshOrLoadMoreViewStateNormal && [self shouldTiggleRefreshOrLoadMoreForScrollView:scrollView]) {
-			[self setPullRefreshOrLoadMoreState:IDFPullRefreshOrLoadMoreViewStatePulling];
+    if (self.pullRefreshOrLoadMoreState != KLPullRefreshOrLoadMoreViewStateLoading) {
+		if (self.pullRefreshOrLoadMoreState == KLPullRefreshOrLoadMoreViewStatePulling && ![self shouldTiggleRefreshOrLoadMoreForScrollView:scrollView]) {
+			[self setPullRefreshOrLoadMoreState:KLPullRefreshOrLoadMoreViewStateNormal];
+		} else if (self.pullRefreshOrLoadMoreState == KLPullRefreshOrLoadMoreViewStateNormal && [self shouldTiggleRefreshOrLoadMoreForScrollView:scrollView]) {
+			[self setPullRefreshOrLoadMoreState:KLPullRefreshOrLoadMoreViewStatePulling];
 		}
 	}
 }
@@ -50,7 +50,7 @@
         return;
     }
     
-    if (self.pullRefreshOrLoadMoreState == IDFPullRefreshOrLoadMoreViewStateLoading) {
+    if (self.pullRefreshOrLoadMoreState == KLPullRefreshOrLoadMoreViewStateLoading) {
         return;
     }
     
@@ -58,7 +58,7 @@
 		
         [self askForRefreshOrLoadMore];
 		
-		[self setPullRefreshOrLoadMoreState:IDFPullRefreshOrLoadMoreViewStateLoading];
+		[self setPullRefreshOrLoadMoreState:KLPullRefreshOrLoadMoreViewStateLoading];
         
         [UIView animateWithDuration:0.2 animations:^{
             [self applyOffsetOnScrollView:scrollView withOffset:self.frame.size.height];
@@ -75,7 +75,7 @@
         scrollView.contentInset = UIEdgeInsetsZero;
     }completion:^(BOOL finished) {
         if (finished) {
-            [self setPullRefreshOrLoadMoreState:IDFPullRefreshOrLoadMoreViewStateNormal];
+            [self setPullRefreshOrLoadMoreState:KLPullRefreshOrLoadMoreViewStateNormal];
         }
     }];
 }
@@ -106,15 +106,15 @@
     return loadingText;
 }
 
-- (NSString *)textForState:(IDFPullRefreshOrLoadMoreViewState)state {
+- (NSString *)textForState:(KLPullRefreshOrLoadMoreViewState)state {
     switch (state) {
-        case IDFPullRefreshOrLoadMoreViewStateLoading: {
+        case KLPullRefreshOrLoadMoreViewStateLoading: {
             return [self loadingText];
         }
-        case IDFPullRefreshOrLoadMoreViewStateNormal: {
+        case KLPullRefreshOrLoadMoreViewStateNormal: {
             return [self pullingText];
         }
-        case IDFPullRefreshOrLoadMoreViewStatePulling: {
+        case KLPullRefreshOrLoadMoreViewStatePulling: {
             return [self releaseText];
         }
         default: {
@@ -128,7 +128,7 @@
 }
 
 - (void)askForRefreshOrLoadMore {
-    if (self.type == IDFPullRefreshOrLoadMoreViewTypeRefresh) {
+    if (self.type == KLPullRefreshOrLoadMoreViewTypeRefresh) {
         if ([self.delegate respondsToSelector:@selector(pullRefreshOrLoadMoreViewAskForRefresh:)]) {
             [self.delegate pullRefreshOrLoadMoreViewAskForRefresh:self];
         }
@@ -141,11 +141,11 @@
 
 - (void)applyOffsetOnScrollView:(UIScrollView *)scView withOffset:(CGFloat)offset {
     switch (self.type) {
-        case IDFPullRefreshOrLoadMoreViewTypeLoadMore: {
+        case KLPullRefreshOrLoadMoreViewTypeLoadMore: {
             [scView setContentInset:UIEdgeInsetsMake(0, 0, offset, 0)];
             break;
         }
-        case IDFPullRefreshOrLoadMoreViewTypeRefresh: {
+        case KLPullRefreshOrLoadMoreViewTypeRefresh: {
             [scView setContentInset:UIEdgeInsetsMake(offset, 0, 0, 0)];
             break;
         }
@@ -158,13 +158,13 @@
     BOOL shouldTiggle = NO;
     
     switch (self.type) {
-        case IDFPullRefreshOrLoadMoreViewTypeLoadMore: {
+        case KLPullRefreshOrLoadMoreViewTypeLoadMore: {
             if (scrollView.contentOffset.y+scrollView.bounds.size.height >= scrollView.contentSize.height+self.frame.size.height) {
                 shouldTiggle = YES;
             }
             break;
         }
-        case IDFPullRefreshOrLoadMoreViewTypeRefresh: {
+        case KLPullRefreshOrLoadMoreViewTypeRefresh: {
             if (scrollView.contentOffset.y < -1*self.frame.size.height) {
                 shouldTiggle = YES;
             }
@@ -176,17 +176,17 @@
     return shouldTiggle;
 }
 
-- (void)updateLayoutForArrayImgViewWithAnimation:(BOOL)withAnimation state:(IDFPullRefreshOrLoadMoreViewState)state {
+- (void)updateLayoutForArrayImgViewWithAnimation:(BOOL)withAnimation state:(KLPullRefreshOrLoadMoreViewState)state {
     CATransform3D transform = CATransform3DIdentity;
     switch (state) {
-        case IDFPullRefreshOrLoadMoreViewStateNormal: {
-            if (self.type == IDFPullRefreshOrLoadMoreViewTypeLoadMore) {
+        case KLPullRefreshOrLoadMoreViewStateNormal: {
+            if (self.type == KLPullRefreshOrLoadMoreViewTypeLoadMore) {
                 transform = CATransform3DMakeRotation((M_PI / 180.0) * 180.0f, 0.0f, 0.0f, 1.0f);
             }
             break;
         }
-        case IDFPullRefreshOrLoadMoreViewStatePulling: {
-            if (self.type == IDFPullRefreshOrLoadMoreViewTypeRefresh) {
+        case KLPullRefreshOrLoadMoreViewStatePulling: {
+            if (self.type == KLPullRefreshOrLoadMoreViewTypeRefresh) {
                 transform = CATransform3DMakeRotation((M_PI / 180.0) * 180.0f, 0.0f, 0.0f, 1.0f);
             }
             break;
@@ -204,15 +204,15 @@
     }
 }
 
-- (void)showOrHideUIWithState:(IDFPullRefreshOrLoadMoreViewState)state {
+- (void)showOrHideUIWithState:(KLPullRefreshOrLoadMoreViewState)state {
     switch (state) {
-        case IDFPullRefreshOrLoadMoreViewStatePulling:
-        case IDFPullRefreshOrLoadMoreViewStateNormal:{
+        case KLPullRefreshOrLoadMoreViewStatePulling:
+        case KLPullRefreshOrLoadMoreViewStateNormal:{
             [self.imgViewLayer setHidden:NO];
             [self.activityView setAlpha:0.0];
             break;
         }
-        case IDFPullRefreshOrLoadMoreViewStateLoading: {
+        case KLPullRefreshOrLoadMoreViewStateLoading: {
             [self.imgViewLayer setHidden:YES];
             [self.activityView setAlpha:1.0];
             break;
@@ -222,7 +222,7 @@
     }
 }
 
-- (void)adjustUIWithDesText:(NSString *)desText state:(IDFPullRefreshOrLoadMoreViewState)state {
+- (void)adjustUIWithDesText:(NSString *)desText state:(KLPullRefreshOrLoadMoreViewState)state {
     [self.desLabel setText:desText];
     CGSize textSize = CGSizeZero;
     if ([[UIDevice currentDevice].systemVersion floatValue] >= 7.0) {
@@ -236,7 +236,7 @@
 #endif
     }
     
-    CGFloat imgOrActivityWidth = (state == IDFPullRefreshOrLoadMoreViewStateLoading ? self.activityView.frame.size.width : self.imgViewLayer.frame.size.width);
+    CGFloat imgOrActivityWidth = (state == KLPullRefreshOrLoadMoreViewStateLoading ? self.activityView.frame.size.width : self.imgViewLayer.frame.size.width);
     CGFloat sumWidthForLeftUICompent = imgOrActivityWidth + 10; //10 for margin
     CGRect labelFrame = self.desLabel.frame;
     labelFrame.size.width = textSize.width + 10; //10 for Margin
@@ -265,7 +265,7 @@
     [self.customView setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin];
     [self addSubview:self.customView];
     
-    //[self setPullRefreshOrLoadMoreState:IDFPullRefreshOrLoadMoreViewStateNormal];
+    //[self setPullRefreshOrLoadMoreState:KLPullRefreshOrLoadMoreViewStateNormal];
 }
 
 - (void)layoutWithLoadMoreInfo {
@@ -300,7 +300,7 @@
     [self.desLabel setBackgroundColor:[UIColor clearColor]];
     [self addSubview:self.desLabel];
     
-    [self setPullRefreshOrLoadMoreState:IDFPullRefreshOrLoadMoreViewStateNormal];
+    [self setPullRefreshOrLoadMoreState:KLPullRefreshOrLoadMoreViewStateNormal];
 }
 
 - (void)updateUI {
@@ -325,7 +325,7 @@
     return self;
 }
 
-- (void)setInfo:(IDFPullRefreshOrLoadMoreInfo *)info {
+- (void)setInfo:(KLPullRefreshOrLoadMoreInfo *)info {
     if (_info != info) {
         _info = info;
         [self updateUI];
@@ -340,14 +340,14 @@
     }
 }
 
-- (void)setType:(IDFPullRefreshOrLoadMoreViewType)type {
+- (void)setType:(KLPullRefreshOrLoadMoreViewType)type {
     if (_type != type) {
         _type = type;
         [self updateUI];
     }
 }
 
-- (void)setPullRefreshOrLoadMoreState:(IDFPullRefreshOrLoadMoreViewState)pullRefreshOrLoadMoreState {
+- (void)setPullRefreshOrLoadMoreState:(KLPullRefreshOrLoadMoreViewState)pullRefreshOrLoadMoreState {
     if (self.customView) {
         if ([self.delegate respondsToSelector:@selector(pullRefreshOrLoadMoreView:customViewShouldUpdateForState:)]) {
             [self.delegate pullRefreshOrLoadMoreView:self customViewShouldUpdateForState:pullRefreshOrLoadMoreState];
@@ -357,12 +357,12 @@
         [self showOrHideUIWithState:pullRefreshOrLoadMoreState];
         [self adjustUIWithDesText:text state:pullRefreshOrLoadMoreState];
         switch (pullRefreshOrLoadMoreState) {
-            case IDFPullRefreshOrLoadMoreViewStateLoading: {
+            case KLPullRefreshOrLoadMoreViewStateLoading: {
                 [self.activityView startAnimating];
                 break;
             }
-            case IDFPullRefreshOrLoadMoreViewStateNormal:
-            case IDFPullRefreshOrLoadMoreViewStatePulling: {
+            case KLPullRefreshOrLoadMoreViewStateNormal:
+            case KLPullRefreshOrLoadMoreViewStatePulling: {
                 [self updateLayoutForArrayImgViewWithAnimation:YES state:pullRefreshOrLoadMoreState];
             }
             default:
