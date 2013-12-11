@@ -4,7 +4,7 @@ KLPullRefreshOrLoadMoreView
 Pull refresh or load more view for iOS <br>
 支持经典的iOS上拉／下拉刷新机制，支持界面和行为自定义
 
-  self.pullRefreshView = [[KLPullRefreshOrLoadMoreView alloc] initWithFrame:CGRectMake(0, -65,   self.tableView.frame.size.width, 65)];
+    self.pullRefreshView = [[KLPullRefreshOrLoadMoreView alloc] initWithFrame:CGRectMake(0, -65,         self.tableView.frame.size.width, 65)];
     [self.pullRefreshView setType:KLPullRefreshOrLoadMoreViewTypeRefresh];
     [self.pullRefreshView setDelegate:self];
     [self.view addSubview:self.pullRefreshView];
